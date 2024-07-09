@@ -1,4 +1,4 @@
-class NewGrid
+class NewGame
     @@turn = 0
     @@transpose = Array.new(3) {Array.new(3,"_")}
     def initialize
@@ -13,19 +13,6 @@ class NewGrid
         self.rough_grid.each { |line| puts line.join (" | ") }
     end
 
-    def status
-        self.grid
-        if @@turn > 4
-            if self.rough_grid.any? { |line| line.all?("X") || line.all?(0)} || @@transpose.any? { |line| line.all?("X") || line.all?(0)}
-            puts "Winner Winner!!"
-            @@turn = 0
-            @grid = Array.new(3) {Array.new(3,"_")}
-            @@transpose = Array.new(3) {Array.new(3,"_")}
-        else
-            end
-        else
-        end
-    end
 
     def move(xpos,ypos)
         if self.rough_grid[xpos][ypos] == "_"
@@ -42,7 +29,24 @@ class NewGrid
             puts "Position already marked, try again."
         end
     end
+    private
+    def gameover
+        puts "Winner Winner!!"
+        @@turn = 0
+        @grid = Array.new(3) {Array.new(3,"_")}
+        @@transpose = Array.new(3) {Array.new(3,"_")}
+    end
+    def status
+        self.grid
+        if @@turn > 4
+            if self.rough_grid.any? { |line| line.all?("X") || line.all?(0)} || @@transpose.any? { |line| line.all?("X") || line.all?(0)}
+                self.gameover
+            elsif self.rough_grid[0][0]==self.rough_grid[2][2] && self.rough_grid[0][0]==self.rough_grid[1][1]
+                self.gameover
+            elsif self.rough_grid[0][2]==self.rough_grid[2][0] && self.rough_grid[0][2]==self.rough_grid[1][1]
+                self.gameover
+            end
+        else
+        end
+    end
 end
-
-#game = NewGrid.new(3)
-#game.grid
